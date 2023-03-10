@@ -10,6 +10,8 @@ import 'package:todoey_two/widgets/category_container.dart';
 import 'package:todoey_two/widgets/tasks_list.dart';
 import 'package:todoey_two/widgets/tasktile.dart';
 
+import 'package:lottie/lottie.dart';
+
 class TasksScreen extends StatefulWidget {
   @override
   State<TasksScreen> createState() => _TasksScreenState();
@@ -202,23 +204,22 @@ class _TasksScreenState extends State<TasksScreen> {
                     //tasks list builder
                     Container(
                       child: todoList.isEmpty
-                          ? Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
+                          ? SizedBox(
                               height: 300,
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      Iconsax.bag,
-                                      size: 40,
+                                  children: [
+                                    Lottie.network(
+                                      'https://assets4.lottiefiles.com/private_files/lf30_cgfdhxgx.json',
+                                      width: 300,
+                                      height: 260,
+                                      //fit: BoxFit.cover,
+                                      //loop: true,
                                     ),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      'You do not have any task',
+                                    const SizedBox(height: 10),
+                                    const Text(
+                                      'You have not added a task',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,

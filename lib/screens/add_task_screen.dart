@@ -138,7 +138,8 @@ class AddTaskScreen extends StatelessWidget {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                             color: grey.withOpacity(0.2), width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
                       ),
                     ),
                   ),

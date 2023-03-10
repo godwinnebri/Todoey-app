@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:todoey_two/widgets/tasktile.dart';
 
 class TasksList extends StatefulWidget {
   final List tasks;
-  const TasksList({required this.tasks});
+  const TasksList({
+    super.key,
+    required this.tasks,
+  });
 
   @override
   State<TasksList> createState() => _TasksListState();
@@ -12,22 +16,43 @@ class TasksList extends StatefulWidget {
 class _TasksListState extends State<TasksList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: widget.tasks.length,
       itemBuilder: (context, index) {
-        return TaskTile(
-            taskName: widget.tasks[index].name,
-            taskCategory: widget.tasks[index].category,
-            taskCompleted: widget.tasks[index].isDone,
-            checkboxCallback: (checkboxState) {
+        return SizedBox(
+          child: Dismissible(
+            key: UniqueKey(),
+            onDismissed: (direction) {
               setState(() {
-                widget.tasks[index].toggleDone();
+                widget.tasks.removeAt(index);
               });
-            }
-            //onChanged: (value) => checkboxChanged(value, index),
-            );
+            },
+            background: Container(
+              child: Lottie.network(
+                'https://assets9.lottiefiles.com/packages/lf20_khh1znj5.json',
+                width: 16,
+                height: 16,
+              ),
+            ),
+            child: TaskTile(
+              taskName: widget.tasks[index].name,
+              taskCategory: widget.tasks[index].category,
+              taskCompleted: widget.tasks[index].isDone,
+              checkboxCallback: (checkboxState) {
+                setState(() {
+                  widget.tasks[index].toggleDone();
+                });
+              },
+            ),
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox(
+          height: 14,
+        );
       },
     );
   }
