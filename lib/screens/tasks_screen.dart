@@ -1,48 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-
 import 'package:iconsax/iconsax.dart';
 import 'package:todoey_two/constants/color_constants.dart';
-import 'package:todoey_two/models/task.dart';
+import 'package:todoey_two/utils/category_enum.dart';
+import 'package:todoey_two/utils/todo_list_class.dart';
 import 'package:todoey_two/screens/add_task_screen.dart';
-import 'package:todoey_two/widgets/buttons/bare_button.dart';
-import 'package:todoey_two/widgets/category_container.dart';
-import 'package:todoey_two/widgets/tasks_list.dart';
-import 'package:todoey_two/widgets/tasktile.dart';
-
 import 'package:lottie/lottie.dart';
+import 'package:todoey_two/widgets/components/category_container.dart';
+import 'package:todoey_two/widgets/components/tasks_listview.dart';
 
 class TasksScreen extends StatefulWidget {
+  const TasksScreen({super.key});
+
   @override
   State<TasksScreen> createState() => _TasksScreenState();
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  //List of tasks
-  List<Task> todoList = [
-    // Task(name: 'Make twitter post', category: 'Work'),
-    // Task(name: 'Make facebook post', category: 'Work'),
-    // Task(name: 'Make instagram post', category: 'Work'),
-    // Task(name: 'Make instagram post', category: 'jnuh'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    TodoList().joinAllTasks(); // call joinAllTasks() method here
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
             context: context,
             builder: (context) => AddTaskScreen(
-              (newTaskTitle, newTaskCategory) {
+              (newTaskTitle, selectedCategory) {
                 setState(
                   () {
-                    todoList.add(
-                      Task(
-                        name: newTaskTitle,
-                        category: newTaskCategory,
-                      ),
+                    TaskCategory.addToTaskCategory(
+                      newTaskTitle,
+                      selectedCategory,
                     );
+
+                    print(newTaskTitle);
+                    print(selectedCategory.toString());
+                    print(TodoList.schoolTasks[0].name);
                   },
                 );
                 Navigator.pop(context);
@@ -125,7 +119,7 @@ class _TasksScreenState extends State<TasksScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "You have ${todoList.length} tasks today",
+                      "You have ${TodoList.allTasks.length} tasks today",
                       style: const TextStyle(fontSize: 14, color: textColor1),
                     ),
                   ],
@@ -143,7 +137,7 @@ class _TasksScreenState extends State<TasksScreen> {
                       "Categories",
                       style: TextStyle(fontSize: 16, color: grey),
                     ),
-                    BareButton(text: "New")
+                    // BareButton(text: "New")
                   ],
                 ),
               ),
@@ -158,29 +152,38 @@ class _TasksScreenState extends State<TasksScreen> {
                   child: ListView(
                       clipBehavior: Clip.none,
                       scrollDirection: Axis.horizontal,
-                      children: const [
+                      children: [
                         CategoryContainer(
-                          taskNumber: 8,
+                          taskNumber: TodoList.schoolTasks.isEmpty
+                              ? 'No'
+                              : TodoList.schoolTasks.length.toString(),
                           categoryName: "School",
                           categoryColor: accentColor,
-                          progress: 140,
+                          progress: TodoList.schoolTasks.length,
                         ),
                         CategoryContainer(
-                          taskNumber: 3,
+                          taskNumber: TodoList.personalTasks.isEmpty
+                              ? 'No'
+                              : TodoList.schoolTasks.length.toString(),
                           categoryName: "Personal",
                           categoryColor: primaryColor,
+                          progress: TodoList.personalTasks.length,
                         ),
                         CategoryContainer(
-                          taskNumber: 12,
+                          taskNumber: TodoList.workTasks.isEmpty
+                              ? 'No'
+                              : TodoList.schoolTasks.length.toString(),
                           categoryName: "Work",
                           categoryColor: Colors.green,
-                          progress: 120,
+                          progress: TodoList.workTasks.length,
                         ),
                         CategoryContainer(
-                          taskNumber: 5,
+                          taskNumber: TodoList.businessTasks.isEmpty
+                              ? 'No'
+                              : TodoList.schoolTasks.length.toString(),
                           categoryName: "Business",
                           categoryColor: Colors.lightBlue,
-                          progress: 120,
+                          progress: TodoList.businessTasks.length,
                         ),
                       ]),
                 ),
@@ -203,7 +206,7 @@ class _TasksScreenState extends State<TasksScreen> {
 
                     //tasks list builder
                     Container(
-                      child: todoList.isEmpty
+                      child: TodoList.schoolTasks.isEmpty
                           ? SizedBox(
                               height: 300,
                               child: Center(
@@ -230,7 +233,7 @@ class _TasksScreenState extends State<TasksScreen> {
                               ),
                             )
                           : TasksList(
-                              tasks: todoList,
+                              tasks: TodoList.allTasks,
                             ),
                     ),
                   ],

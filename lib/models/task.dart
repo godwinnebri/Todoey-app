@@ -1,6 +1,8 @@
+import 'package:todoey_two/utils/category_enum.dart';
+
 class Task {
   final String name;
-  final String category;
+  final TaskCategory? category;
 
   bool isDone;
 
@@ -12,6 +14,5 @@ class Task {
 
   void toggleDone() {
     isDone = !isDone;
-    
   }
 }

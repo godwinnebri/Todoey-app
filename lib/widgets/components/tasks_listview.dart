@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:todoey_two/widgets/tasktile.dart';
+import 'package:todoey_two/widgets/components/tasktile.dart';
 
 class TasksList extends StatefulWidget {
   final List tasks;
@@ -57,11 +57,3 @@ class _TasksListState extends State<TasksList> {
     );
   }
 }
-
-
-//  //this method is triggered when checkbox is tapped
-//   void checkboxChanged(bool? value, int index) {
-//     setState(() {
-//       todoList[index][2] = !todoList[index][2];
-//     });
-//   }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:todoey_two/constants/color_constants.dart';
+import 'package:todoey_two/utils/category_enum.dart';
 
 class TaskTile extends StatelessWidget {
   final String taskName;
-  final String taskCategory;
+  final TaskCategory? taskCategory;
   final bool taskCompleted;
   final Function(bool?)? checkboxCallback;
 
-  TaskTile(
+  const TaskTile(
       {required this.taskName,
       required this.taskCategory,
       required this.taskCompleted,
@@ -61,11 +62,11 @@ class TaskTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Text(
                       taskName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: textColor1,
                         fontWeight: FontWeight.w500,
@@ -79,7 +80,7 @@ class TaskTile extends StatelessWidget {
 
                   //subtext
                   Text(
-                    taskCategory,
+                    taskCategory.toString(),
                     style: const TextStyle(
                         fontSize: 14,
                         color: textColor3,
@@ -92,7 +93,7 @@ class TaskTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Container(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: taskCompleted ? Colors.green : null,
@@ -111,6 +112,5 @@ class TaskTile extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

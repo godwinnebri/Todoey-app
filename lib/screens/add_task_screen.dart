@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:todoey_two/constants/color_constants.dart';
+import 'package:todoey_two/utils/category_enum.dart';
 import 'package:todoey_two/widgets/buttons/primary_buttton.dart';
-import 'package:todoey_two/widgets/textfields/textfield(title).dart';
+import 'package:todoey_two/widgets/textfield.dart';
 
-class AddTaskScreen extends StatelessWidget {
-  AddTaskScreen(this.addTaskCallback);
+class AddTaskScreen extends StatefulWidget {
+  const AddTaskScreen(this.addTaskCallback, {super.key});
   final Function addTaskCallback;
 
-  Widget build(BuildContext context) {
-    String newTaskTitle = '';
-    String newTaskCategory = '';
+  @override
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
+}
 
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  final TextEditingController titleController = TextEditingController();
+
+  TaskCategory? selectedCategory = TaskCategory.values.first;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: const Color(0xff727375),
       child: Container(
@@ -44,115 +52,67 @@ class AddTaskScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               //tasktitle textfield
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: Container(
-                  height: 54,
-                  child: TextFormField(
-                    // autofocus: true,
-                    //focusNode: _focusNode,
-                    //  onTap: _requestFocus,
-                    // controller: inputController,
-                    onChanged: (newText) {
-                      newTaskTitle = newText;
-                    },
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                    decoration: InputDecoration(
-                      label: Text('Task title'),
-                      labelStyle: const TextStyle(
-                          // color: _focusNode.hasFocus ? primaryColor : grey,
-                          fontSize: 16),
-
-                      // prefixIcon: Icon(Icons.email),
-                      filled: false,
-                      //fillColor: accentColor,
-                      hintText: 'Enter task title',
-                      hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 20.0, horizontal: 18.0),
-                      border: const OutlineInputBorder(
-                        borderSide: BorderSide(color: grey, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      errorBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: grey.withOpacity(0.2), width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                    ),
-                  ),
-                ),
+              TextFieldWidget(
+                labelText: 'Task title',
+                hintText: 'Enter task title',
+                controller: titleController,
               ),
 
               const SizedBox(height: 18),
 
-              //description textfield
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: Container(
-                  height: 54,
-                  child: TextFormField(
-                    // autofocus: true,
-                    //focusNode: _focusNode,
-                    //  onTap: _requestFocus,
-                    // controller: inputController,
-                    onChanged: (newText) {
-                      newTaskCategory = newText;
-                    },
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                    decoration: InputDecoration(
-                      label: Text('Category'),
-                      labelStyle: const TextStyle(
-                          // color: _focusNode.hasFocus ? primaryColor : grey,
-                          fontSize: 16),
-
-                      // prefixIcon: Icon(Icons.email),
-                      filled: false,
-                      //fillColor: accentColor,
-                      hintText: 'Enter task category',
-                      hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 20.0, horizontal: 18.0),
-                      border: const OutlineInputBorder(
-                        borderSide: BorderSide(color: grey, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      errorBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: grey.withOpacity(0.2), width: 1.0),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
-                      ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    margin: const EdgeInsets.symmetric(horizontal: 28),
+                    width: constraints.maxWidth,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  ),
-                ),
+                    child: DropdownButton<TaskCategory>(
+                      value: selectedCategory,
+                      onChanged: (TaskCategory? newValue) {
+                        setState(() {
+                          selectedCategory = newValue;
+                        });
+                      },
+                      dropdownColor: Colors.white,
+                      icon: Padding(
+                        padding: EdgeInsets.only(
+                          left: constraints.maxWidth * 0.55,
+                        ), // set padding here
+                        child: const Icon(Icons.arrow_drop_down),
+                      ),
+                      iconSize: 36,
+                      elevation: 0,
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 0,
+                      ),
+                      itemHeight: 58,
+                      items: TaskCategory.values.map((category) {
+                        return DropdownMenuItem<TaskCategory>(
+                          value: category,
+                          child: Text(category.toString()),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                },
               ),
-              const SizedBox(height: 20),
+
+              const SizedBox(height: 16),
+
               PrimaryButton(
                 buttonText: "Create task",
                 onPressed: () {
                   //do something
-                  newTaskTitle == ''
+
+                  titleController.text == ''
                       ? null
-                      : addTaskCallback(newTaskTitle, newTaskCategory);
+                      : widget.addTaskCallback(
+                          titleController.text, selectedCategory);
                 },
               )
             ],
